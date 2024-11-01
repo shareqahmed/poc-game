@@ -20,81 +20,8 @@ namespace poc_game
         private int _coins;
         public event Action CoinsChanged = () => { };
         public event Action StarsChanged = () => { };
-        public int Coins
-        {
-            get => _coins;
-            set
-            {
-                if (_coins != value)
-                {
-                    _coins = value;
-                    if (_inTransaction)
-                    {
-                        _coinsChanged = true;
-                    }
-                    else
-                    {
-                        CoinsChanged();
-                    }
 
-                }
-            }
-        }
-
-
-
-        public int Stars
-        {
-            get => _stars;
-            set
-            {
-                if (_stars != value)
-                {
-                    _stars = value;
-                    if (_inTransaction)
-                    {
-                        _starsChanged = true;
-
-                    }
-
-                    else
-                    {
-                        StarsChanged();
-                    }
-                }
-            }
-        }
-
-
-
-        public void BeginTransaction()
-        {
-            Console.WriteLine("Transaction started.");
-            _inTransaction = true;
-        }
-
-        public void EndTransaction()
-        {
-            Console.WriteLine("Attempting to commit transaction.");
-            _inTransaction = false;
-            if (_coinsChanged)
-            {
-                Console.WriteLine("Notifying about coin change.");
-                CoinsChanged();
-                _coinsChanged = false;
-            }
-            if (_starsChanged)
-            {
-                Console.WriteLine("Notifying about stars change.");
-                StarsChanged();
-                _starsChanged = false;
-            }
-        }
-
-
-
-        //// for central
-        //private TransactionManager _transactionManager = new TransactionManager();
+        // scoped
         //public int Coins
         //{
         //    get => _coins;
@@ -103,10 +30,20 @@ namespace poc_game
         //        if (_coins != value)
         //        {
         //            _coins = value;
-        //            _transactionManager.RegisterChange(CoinsChanged);
+        //            if (_inTransaction)
+        //            {
+        //                _coinsChanged = true;
+        //            }
+        //            else
+        //            {
+        //                CoinsChanged();
+        //            }
+
         //        }
         //    }
         //}
+
+
 
         //public int Stars
         //{
@@ -116,19 +53,84 @@ namespace poc_game
         //        if (_stars != value)
         //        {
         //            _stars = value;
-        //            _transactionManager.RegisterChange(StarsChanged);
+        //            if (_inTransaction)
+        //            {
+        //                _starsChanged = true;
+
+        //            }
+
+        //            else
+        //            {
+        //                StarsChanged();
+        //            }
         //        }
         //    }
         //}
 
+
+
         //public void BeginTransaction()
         //{
-        //    _transactionManager.BeginTransaction();
+        //    Console.WriteLine("Transaction started.");
+        //    _inTransaction = true;
         //}
 
         //public void EndTransaction()
         //{
-        //    _transactionManager.EndTransaction();
+        //    Console.WriteLine("Attempting to commit transaction.");
+        //    _inTransaction = false;
+        //    if (_coinsChanged)
+        //    {
+        //        Console.WriteLine("Notifying about coin change.");
+        //        CoinsChanged();
+        //        _coinsChanged = false;
+        //    }
+        //    if (_starsChanged)
+        //    {
+        //        Console.WriteLine("Notifying about stars change.");
+        //        StarsChanged();
+        //        _starsChanged = false;
+        //    }
         //}
+
+
+
+        //// for central
+        private TransactionManager _transactionManager = new TransactionManager();
+        public int Coins
+        {
+            get => _coins;
+            set
+            {
+                if (_coins != value)
+                {
+                    _coins = value;
+                    _transactionManager.RegisterChange(CoinsChanged);
+                }
+            }
+        }
+
+        public int Stars
+        {
+            get => _stars;
+            set
+            {
+                if (_stars != value)
+                {
+                    _stars = value;
+                    _transactionManager.RegisterChange(StarsChanged);
+                }
+            }
+        }
+
+        public void BeginTransaction()
+        {
+            _transactionManager.BeginTransaction();
+        }
+
+        public void EndTransaction()
+        {
+            _transactionManager.EndTransaction();
+        }
     }
 }

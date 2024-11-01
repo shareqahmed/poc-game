@@ -99,12 +99,12 @@ namespace poc_game_subscribe
             _inTransaction = false;
             if (_coinsChanged)
             {
-                NotifySubscribers("Coins");
+                NotifySubscribers(nameof(Coins));
                 _coinsChanged = false;
             }
             if (_starsChanged)
             {
-                NotifySubscribers("Stars");
+                NotifySubscribers(nameof(Stars));
                 _starsChanged = false;
             }
         }

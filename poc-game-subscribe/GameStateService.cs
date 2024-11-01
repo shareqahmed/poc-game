@@ -13,8 +13,6 @@ namespace poc_game_subscribe
         public GameStateService()
         {
 
-
-
             _gameState.Subscribe("Coins", () => CoinsChanged());
             _gameState.Subscribe("Stars", () => StarsChanged());
 
